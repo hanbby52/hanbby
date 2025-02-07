@@ -1,0 +1,383 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hanbby Redux</title>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap">
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            color: #fff;
+            background-image: url('./catalog/2_.png'); /* Замените на путь к вашему изображению */
+            background-size: cover;
+            background-position: center center;
+            background-attachment: fixed; /* Если хотите, чтобы фон оставался на месте при прокрутке */
+            font-family: 'Roboto', sans-serif;
+            text-align: center;
+            transition: filter 0.3s ease;
+            padding-bottom: 70px; /* Отступ снизу для фиксированного footer */
+        }
+
+        .container {
+            width: 90%;
+            max-width: 1000px;
+            margin: 50px auto;
+            position: relative;
+            padding-top: 70px; /* Отступ сверху для фиксированного navbar */
+        }
+
+        .qr-codes {
+            position: fixed;
+            top: 70px; /* Расположить под navbar */
+            left: 20px;
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+            z-index: 1000;
+        }
+
+        .qr-codes img {
+            width: 150px; /* Увеличенный размер */
+            height: 150px; /* Увеличенный размер */
+            border-radius: 10px;
+        }
+
+        h1, h2 {
+            font-size: 48px;
+            margin-bottom: 20px;
+            background: linear-gradient(45deg, #e71c1c, #f088e2, #ffffff);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        h2 {
+            font-size: 32px;
+            margin-top: 40px;
+        }
+
+        p {
+            font-size: 20px;
+            margin: 15px 0;
+            line-height: 1.6;
+        }
+
+        .image-container {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 15px;
+            margin-top: 20px;
+            padding: 25px;
+            border-radius: 25px;
+            background-color: rgba(255, 255, 255, 0.1);
+        }
+
+        .image-container img {
+            width: 300px;
+            height: auto;
+            border-radius: 10px;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            cursor: pointer;
+        }
+
+        .image-container img:hover {
+            transform: scale(1.05);
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+        }
+
+        .download-button {
+            display: inline-block;
+            font-size: 60px;
+            padding: 50px 500px; /* Настройте размеры кнопки, если нужно */
+            margin-top: -110px;
+            border: none;
+            background: linear-gradient(45deg, #e71c1c, #f088e2, #ffffff);
+            color: white;
+            cursor: pointer;
+            border-radius: 10px;
+            transition: 0.3s;
+            text-decoration: none;
+        }
+
+    .download-button:hover {
+        background: linear-gradient(45deg, #ffffff, #ffffff);
+        color: black; /* Изменение цвета текста на черный */
+        transform: translateY(-3px);
+    }
+    
+
+
+        .download-button:hover {
+            background: linear-gradient(45deg, #ffffff, #ffffff);
+            transform: translateY(-3px);
+        }
+
+        .navbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background-color: #1c1c1c;
+            padding: 15px 20px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            z-index: 1000;
+        }
+
+        .navbar h1 {
+            margin: 0;
+            font-size: 24px;
+            color: #f371b8;
+        }
+
+        .navbar a {
+            color: #f371b8;
+            text-decoration: none;
+            font-size: 20px;
+            margin: 0 15px;
+            cursor: pointer;
+            transition: color 0.3s;
+        }
+
+        .navbar a:hover {
+            color: #ffffff;
+        }
+
+        .footer {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            padding: 20px;
+            background-color: #1c1c1c;
+            color: #f371b8;
+            box-shadow: 0 -2px 5px rgba(0, 0, 0, 0.2);
+            z-index: 1000;
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background-color: #222;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(255, 152, 0, 0.5);
+            width: 50%;
+            text-align: center;
+            z-index: 1000;
+        }
+
+        .modal.active {
+            display: block;
+        }
+
+        .modal button {
+            margin-top: 10px;
+            padding: 10px 20px;
+            background-color: #f371b8;
+            border: none;
+            color: white;
+            font-size: 18px;
+            cursor: pointer;
+            border-radius: 5px;
+            transition: background 0.3s;
+        }
+
+        .modal button:hover {
+            background-color: #ffffff;
+        }
+
+        .image-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.8);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .image-modal img {
+            max-width: 80%;
+            max-height: 80%;
+            border-radius: 10px;
+        }
+
+        .navigation {
+            position: absolute;
+            top: 50%;
+            width: 100%;
+            display: flex;
+            justify-content: space-between;
+            transform: translateY(-50%);
+            z-index: 1001;
+        }
+
+        .navigation button {
+            background-color: rgba(0, 0, 0, 0.5);
+            border: none;
+            color: white;
+            font-size: 24px;
+            padding: 10px;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+
+        .navigation button:hover {
+            background-color: rgba(0, 0, 0, 0.7);
+        }
+
+        .img-container{
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 15px;
+            margin-top: 20px;
+            padding: 10%;
+            border-radius: 0px;
+        }
+
+        /* Центровка кнопки */
+        .button-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh; /* Полная высота окна */
+            width: 100%;
+        }
+
+        
+
+    </style>
+</head>
+<body>
+    <div class="navbar">
+        <h1>Hanbby Redux</h1>
+        <nav>
+            <a id="homeBtn" href="./catalog.html">Главная</a>
+            <a id="aboutBtn">О нас</a>
+            <a id="contactBtn">Контакты</a>
+        </nav>
+    </div>
+    
+    <div class="button-container">
+        <a href="./main.html" class="download-button">каталог</a>
+    </div>
+
+    <div class="modal" id="aboutModal">
+        <h2>О нас</h2>
+        <p>Мы создаем уникальные Redux-проекты, чтобы сделать ваш игровой процесс незабываемым.</p>
+        <p>C мои контентом можете ознакомится в TikTok: mjhanbby</p>
+        <button onclick="closeModal('aboutModal')">Закрыть</button>
+    </div>
+
+    <div class="modal" id="contactModal">
+        <h2>Контакты</h2>
+        <p>Свяжитесь с нами по:</p>
+        <p>Email: boybow516@gmail.com</p>
+        <p>Discord: hanbby</p>
+        <button onclick="closeModal('contactModal')">Закрыть</button>
+    </div>
+
+    <div class="footer">
+        <p>&copy; 2025 Hanbby Redux. Все права защищены.</p>
+    </div>
+
+    <div class="image-modal" id="imageModal">
+        <div class="navigation">
+            <button id="prevBtn">&lt;</button>
+            <button id="nextBtn">&gt;</button>
+        </div>
+        <img src="" alt="Enlarged Image">
+    </div>
+
+    <script>
+        const imageContainers = document.querySelectorAll('.image-container');
+        const imageModal = document.getElementById('imageModal');
+        const modalImage = imageModal.querySelector('img');
+        const prevBtn = document.getElementById('prevBtn');
+        const nextBtn = document.getElementById('nextBtn');
+        let currentImages = [];
+        let currentIndex = 0;
+
+        imageContainers.forEach(container => {
+            const images = container.querySelectorAll('img');
+            images.forEach((image, index) => {
+                image.addEventListener('click', () => {
+                    currentImages = Array.from(images);
+                    currentIndex = index;
+                    showImage();
+                    imageModal.style.display = 'flex';
+                });
+            });
+        });
+
+        function showImage() {
+            modalImage.src = currentImages[currentIndex].src;
+        }
+
+        prevBtn.addEventListener('click', (event) => {
+            event.stopPropagation();
+            currentIndex = (currentIndex === 0) ? currentImages.length - 1 : currentIndex - 1;
+            showImage();
+        });
+
+        nextBtn.addEventListener('click', (event) => {
+            event.stopPropagation();
+            currentIndex = (currentIndex === currentImages.length - 1) ? 0 : currentIndex + 1;
+            showImage();
+        });
+
+        imageModal.addEventListener('click', (event) => {
+            if (event.target === imageModal) {
+                imageModal.style.display = 'none';
+            }
+        });
+
+        document.addEventListener('keydown', (event) => {
+            if (imageModal.style.display === 'flex') {
+                if (event.key === 'ArrowLeft') {
+                    currentIndex = (currentIndex === 0) ? currentImages.length - 1 : currentIndex - 1;
+                    showImage();
+                } else if (event.key === 'ArrowRight') {
+                    currentIndex = (currentIndex === currentImages.length - 1) ? 0 : currentIndex + 1;
+                    showImage();
+                } else if (event.key === 'Escape') {
+                    imageModal.style.display = 'none';
+                }
+            }
+        });
+
+        document.getElementById("aboutBtn").addEventListener("click", function() {
+            document.getElementById("aboutModal").classList.add("active");
+        });
+
+        document.getElementById("contactBtn").addEventListener("click", function() {
+            document.getElementById("contactModal").classList.add("active");
+        });
+
+        function closeModal(modalId) {
+            document.getElementById(modalId).classList.remove("active");
+        }
+        document.getElementById("homeBtn").addEventListener("click", function() {
+            window.scrollTo({ top: 0, behavior: "smooth" });
+        });
+
+    </script>
+</body>
+</html>

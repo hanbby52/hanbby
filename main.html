@@ -1,0 +1,443 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hanbby Redux</title>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            color: #fff;
+            background-color: #121212;
+            font-family: 'Roboto', sans-serif;
+            text-align: center;
+            transition: filter 0.3s ease;
+            padding-bottom: 70px;
+        }
+
+        .navbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background-color: #1c1c1c;
+            padding: 15px 20px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            z-index: 1000;
+        }
+
+        .navbar h1 {
+            margin: 0;
+            font-size: 24px;
+            color: #f371b8;
+        }
+
+        .navbar a {
+            color: #f371b8;
+            text-decoration: none;
+            font-size: 20px;
+            margin: 0 15px;
+            cursor: pointer;
+            transition: color 0.3s;
+        }
+
+        .navbar a:hover {
+            color: #ff5722;
+        }
+
+        .top-background {
+            width: 100%;
+            height: 1200px;
+            background-image: url('./catalog/2_.png');
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            position: relative;
+            margin-top: 60px;
+        }
+
+        .top-content {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            text-align: center;
+            color: white;
+            z-index: 10;
+        }
+
+        .top-content h1 {
+            font-size: 48px;
+            background: linear-gradient(45deg, #ff5722, #f371b8);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .top-content p {
+            font-size: 24px;
+        }
+
+        .container {
+            width: 90%;
+            max-width: 1000px;
+            margin: 50px auto;
+            position: relative;
+            padding-top: 70px;
+        }
+
+        .qr-codes {
+            position: fixed;
+            top: 70px;
+            left: 20px;
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+            z-index: 1000;
+        }
+
+        .qr-codes img {
+            width: 150px;
+            height: 150px;
+            border-radius: 10px;
+        }
+
+        h2 {
+            font-size: 32px;
+            margin-top: 40px;
+        }
+
+        p {
+            font-size: 20px;
+            margin: 15px 0;
+            line-height: 1.6;
+        }
+
+        .image-container {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 15px;
+            margin-top: 20px;
+            padding: 25px;
+            border-radius: 25px;
+            background-color: rgba(255, 255, 255, 0.1);
+        }
+
+        body {
+        color: #fff;
+        background-image: url('./catalog/3_.png'); /* Замените на путь к вашей картинке */
+        background-size: cover; /* Это делает картинку фоном по размеру всего экрана */
+        background-position: center center; /* Центрирует картинку */
+        background-repeat: no-repeat; /* Чтобы картинка не повторялась */
+        font-family: 'Roboto', sans-serif;
+        text-align: center;
+        transition: filter 0.3s ease;
+        padding-bottom: 70px;
+        position: relative; /* добавляем для точного позиционирования */
+    }
+
+
+        .image-container img {
+            width: 300px;
+            height: auto;
+            border-radius: 10px;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            cursor: pointer;
+        }
+
+        .image-container img:hover {
+            transform: scale(1.05);
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+        }
+
+        .download-button {
+            display: inline-block;
+            font-size: 22px;
+            padding: 15px 30px;
+            margin-top: 20px;
+            border: none;
+            background: linear-gradient(45deg, #ff5722, #f371b8);
+            color: white;
+            cursor: pointer;
+            border-radius: 8px;
+            transition: 0.3s;
+            text-decoration: none;
+        }
+
+        .download-button:hover {
+            background: linear-gradient(45deg, #e64a19, #ff5722);
+            transform: translateY(-3px);
+        }
+
+        .footer {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            padding: 20px;
+            background-color: #1c1c1c;
+            color: #f371b8;
+            box-shadow: 0 -2px 5px rgba(0, 0, 0, 0.2);
+            z-index: 1000;
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background-color: #222;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
+            width: 50%;
+            text-align: center;
+            z-index: 1000;
+        }
+
+        .modal.active {
+            display: block;
+        }
+
+        .modal button {
+            margin-top: 10px;
+            padding: 10px 20px;
+            background-color: #f371b8;
+            border: none;
+            color: white;
+            font-size: 18px;
+            cursor: pointer;
+            border-radius: 5px;
+            transition: background 0.3s;
+        }
+
+        .modal button:hover {
+            background-color: #ffffff;
+        }
+
+        .image-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.8);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .image-modal img {
+            max-width: 80%;
+            max-height: 80%;
+            border-radius: 10px;
+        }
+
+        .navigation {
+            position: absolute;
+            top: 50%;
+            width: 100%;
+            display: flex;
+            justify-content: space-between;
+            transform: translateY(-50%);
+            z-index: 1001;
+        }
+
+        .navigation button {
+            background-color: rgba(0, 0, 0, 0.5);
+            border: none;
+            color: white;
+            font-size: 24px;
+            padding: 10px;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+
+        .navigation button:hover {
+            background-color: rgba(0, 0, 0, 0.7);
+        }
+
+        .text-box {
+            background: rgba(255, 255, 255, 0.1);
+            border: 2px solid rgba(255, 255, 255, 0.2);
+            backdrop-filter: blur(10px);
+            padding: 20px;
+            border-radius: 15px;
+            display: inline-block;
+            max-width: 80%;
+            margin: 20px auto;
+        }
+
+        .contrast-text {
+            color: #ffffff;
+            text-shadow: 2px 2px 5px rgba(255, 255, 255, 0.8);
+        }
+
+    </style>
+</head>
+<body>
+    <div class="navbar">
+        <h1>Hanbby Redux</h1>
+        <nav>
+            <a href="./index.html">Главная</a>
+            <a href="#" onclick="openModal('aboutModal')">О нас</a>
+            <a href="#" onclick="openModal('contactModal')">Контакты</a>
+        </nav>
+    </div>
+
+    <div class="top-background">
+        <div class="top-content">
+            <h1>Hanbby Redux</h1>
+            <p>Лучшие работы для вашего удовольствия!</p>
+            <h3>↓Все мои работы ниже↓</h3>
+        </div>
+    </div>
+
+    <div class="container">
+        <h1>Hanbby Redux</h1>
+        <div class="text-box">
+            <p>Сайт для выкладывания личных redux</p>
+            <p>Всю информацию вы можете найти на сайте</p>
+        </div>
+        <div class="qr-codes">
+            <img src="./qr/qr-codett.gif" alt="TikTok QR" title="TikTok: @mjhanbby">
+            <img src="./qr/qr-codeyt.gif" alt="YouTube QR" title="YouTube: @hanbby_">
+        </div>
+
+        <div>
+            <h2>Reiz v1</h2>
+            <p>Redux в серых тонах для гетто файтов</p>
+            <div class="image-container">
+                <img src="./reiz v1/photo_2025-02-06_16-29-43.jpg" alt="Hanbby Redux" data-index="0">
+                <img src="./reiz v1/photo_2025-02-06_16-30-01.jpg" alt="Hanbby Redux" data-index="1">
+                <img src="./reiz v1/photo_2025-02-06_16-44-19.jpg" alt="Hanbby Redux" data-index="2">
+            </div>
+            <a href="./reiz redux.html" class="download-button">Скачать Reiz v1</a>
+            <p>Данный redux будет интересен для любителей серых тонов и не яркой картинки</p>
+        </div>
+
+        <div>
+            <h2>Rengoku</h2>
+            <p>Redux в светлых тонах для приятной игры</p>
+            <div class="image-container">
+                <img src="./photo_2025-02-04_23-57-15.jpg" alt="Hanbby Redux" data-index="0">
+            </div>
+            <a href="./rengoku redux.html" class="download-button">Скачать Rengoku</a>
+            <p>Данный redux будет интересен для любителей атмосферной и приятной игры</p>
+        </div>
+    </div>
+
+    <!-- Модальные окна -->
+    <div class="modal" id="aboutModal">
+        <h2>О нас</h2>
+        <p>Мы создаем уникальные Redux-проекты, чтобы сделать ваш игровой процесс незабываемым.</p>
+        <p>C мои контентом можете ознакомится в TikTok: mjhanbby</p>
+        <button onclick="closeModal('aboutModal')">Закрыть</button>
+    </div>
+
+    <div class="modal" id="contactModal">
+        <h2>Контакты</h2>
+        <p>Свяжитесь с нами по:</p>
+        <p>Email: boybow516@gmail.com</p>
+        <p>Discord: hanbby</p>
+        <button onclick="closeModal('contactModal')">Закрыть</button>
+    </div>
+
+    <div class="footer">
+        <p>&copy; 2025 Hanbby Redux. Все права защищены.</p>
+    </div>
+
+    <!-- Модальное окно для изображений -->
+    <div class="image-modal" id="imageModal">
+        <div class="navigation">
+            <button id="prevBtn">&lt;</button>
+            <button id="nextBtn">&gt;</button>
+        </div>
+        <img src="" alt="Enlarged Image">
+    </div>
+
+    <script>
+        const imageContainers = document.querySelectorAll('.image-container');
+        const imageModal = document.getElementById('imageModal');
+        const modalImage = imageModal.querySelector('img');
+        const prevBtn = document.getElementById('prevBtn');
+        const nextBtn = document.getElementById('nextBtn');
+        let currentImages = [];
+        let currentIndex = 0;
+
+        imageContainers.forEach(container => {
+            const images = container.querySelectorAll('img');
+            images.forEach((image, index) => {
+                image.addEventListener('click', () => {
+                    currentImages = Array.from(images);
+                    currentIndex = index;
+                    showImage();
+                    imageModal.style.display = 'flex';
+                });
+            });
+        });
+
+        function showImage() {
+            modalImage.src = currentImages[currentIndex].src;
+        }
+
+        prevBtn.addEventListener('click', (event) => {
+            event.stopPropagation();
+            currentIndex = (currentIndex === 0) ? currentImages.length - 1 : currentIndex - 1;
+            showImage();
+        });
+
+        nextBtn.addEventListener('click', (event) => {
+            event.stopPropagation();
+            currentIndex = (currentIndex === currentImages.length - 1) ? 0 : currentIndex + 1;
+            showImage();
+        });
+
+        imageModal.addEventListener('click', (event) => {
+            if (event.target === imageModal) {
+                imageModal.style.display = 'none';
+            }
+        });
+
+        document.addEventListener('keydown', (event) => {
+            if (event.key === 'ArrowLeft') {
+                prevBtn.click();
+            } else if (event.key === 'ArrowRight') {
+                nextBtn.click();
+            } else if (event.key === 'Escape') {
+                imageModal.style.display = 'none';
+                closeModal('aboutModal');
+                closeModal('contactModal');
+            }
+        });
+
+        function openModal(modalId) {
+            document.getElementById(modalId).classList.add('active');
+        }
+
+        function closeModal(modalId) {
+            document.getElementById(modalId).classList.remove('active');
+        }
+
+        const modals = document.querySelectorAll('.modal');
+        modals.forEach(modal => {
+            modal.addEventListener('click', (event) => {
+                if (event.target === modal) {
+                    modal.classList.remove('active');
+                }
+            });
+        });
+    </script>
+</body>
+</html>
