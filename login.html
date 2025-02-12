@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Вход</title>
+    <script type="module">
+        // Import the functions you need from the SDKs you need
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+         import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
+         import { getAnalytics } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-analytics.js";
+
+        // TODO: Add SDKs for Firebase products that you want to use
+        // https://firebase.google.com/docs/web/setup#available-libraries
+
+        // Your web app's Firebase configuration
+        // For Firebase JS SDK v7.20.0 and later, measurementId is optional
+        const firebaseConfig = {
+            apiKey: "AIzaSyAJK1HpreoH39abRnCmjVtq3SNrUBnHMAI",
+            authDomain: "hanbby-a9579.firebaseapp.com",
+            projectId: "hanbby-a9579",
+            storageBucket: "hanbby-a9579.firebasestorage.app",
+            messagingSenderId: "991485754040",
+            appId: "1:991485754040:web:c1ad51c3682b68ad88d24d",
+            measurementId: "G-60SGJ87ZNZ"
+        };
+
+        // Initialize Firebase
+        const app = initializeApp(firebaseConfig);
+        const analytics = getAnalytics(app);
+
+        // Отслеживание состояния аутентификации
+        onAuthStateChanged(auth, (user) => {
+            if (user) {
+                document.getElementById("authButtons").style.display = "none";
+                document.getElementById("logoutSection").style.display = "block";
+                document.getElementById("welcomeMessage").innerText = `Добро пожаловать, ${user.email}`;
+            } else {
+                document.getElementById("authButtons").style.display = "block";
+                document.getElementById("logoutSection").style.display = "none";
+            }
+        });
+
+        // Функция выхода
+        function logoutUser() {
+            signOut(auth).then(() => {
+                alert("Вы вышли!");
+                window.location.reload();
+            }).catch((error) => {
+                alert("Ошибка выхода: " + error.message);
+            });
+        }
+
+        // Экспорт функции выхода для использования в HTML
+        window.logoutUser = logoutUser;
+    </script>
+    <style>
+        body { font-family: Arial, sans-serif; text-align: center; background: #1c1c1c; color: white; margin: 50px; }
+        input, button { margin: 10px; padding: 10px; width: 200px; }
+    </style>
+</head>
+<body>
+
+    <h1>Вход</h1>
+    <input type="email" id="email" placeholder="Введите Email"><br>
+    <input type="password" id="password" placeholder="Введите пароль"><br>
+    <button onclick="loginUser()">Войти</button>
+
+</body>
+</html>

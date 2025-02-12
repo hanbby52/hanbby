@@ -6,6 +6,56 @@
     <title>Hanbby Redux</title>
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap">
     <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&display=swap" rel="stylesheet">
+    <script type="module">
+        // Import the functions you need from the SDKs you need
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+         import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
+         import { getAnalytics } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-analytics.js";
+
+        // TODO: Add SDKs for Firebase products that you want to use
+        // https://firebase.google.com/docs/web/setup#available-libraries
+
+        // Your web app's Firebase configuration
+        // For Firebase JS SDK v7.20.0 and later, measurementId is optional
+        const firebaseConfig = {
+            apiKey: "AIzaSyAJK1HpreoH39abRnCmjVtq3SNrUBnHMAI",
+            authDomain: "hanbby-a9579.firebaseapp.com",
+            projectId: "hanbby-a9579",
+            storageBucket: "hanbby-a9579.firebasestorage.app",
+            messagingSenderId: "991485754040",
+            appId: "1:991485754040:web:c1ad51c3682b68ad88d24d",
+            measurementId: "G-60SGJ87ZNZ"
+        };
+
+        // Initialize Firebase
+        const app = initializeApp(firebaseConfig);
+        const analytics = getAnalytics(app);
+
+        // Отслеживание состояния аутентификации
+        onAuthStateChanged(auth, (user) => {
+            if (user) {
+                document.getElementById("authButtons").style.display = "none";
+                document.getElementById("logoutSection").style.display = "block";
+                document.getElementById("welcomeMessage").innerText = `Добро пожаловать, ${user.email}`;
+            } else {
+                document.getElementById("authButtons").style.display = "block";
+                document.getElementById("logoutSection").style.display = "none";
+            }
+        });
+
+        // Функция выхода
+        function logoutUser() {
+            signOut(auth).then(() => {
+                alert("Вы вышли!");
+                window.location.reload();
+            }).catch((error) => {
+                alert("Ошибка выхода: " + error.message);
+            });
+        }
+
+        // Экспорт функции выхода для использования в HTML
+        window.logoutUser = logoutUser;
+    </script>
     <style>
         * {
             margin: 0;
@@ -15,10 +65,10 @@
 
         body {
             color: #fff;
-            background-image: url('./catalog/2_.png'); /* Замените на путь к вашему изображению */
+            background-image: url('./catalog/2_.png');
             background-size: cover;
             background-position: center center;
-            background-attachment: fixed; /* Если хотите, чтобы фон оставался на месте при прокрутке */
+            background-attachment: fixed;
             font-family: 'Roboto', sans-serif;
             text-align: center;
             padding-bottom: 70px;
@@ -71,7 +121,7 @@
 
         .catalog-container {
             position: fixed;
-            top: 70px; /* Отступ для navbar */
+            top: 70px;
             left: 0;
             width: 100%;
             height: 100%;
@@ -79,8 +129,6 @@
             justify-content: center;
             align-items: center;
             background: rgba(0, 0, 0, 0);
-            transform: translateX(0); /* Теперь сразу показываем каталог */
-            transition: transform 0.3s ease;
             z-index: 999;
         }
 
@@ -119,6 +167,23 @@
             transform: scale(1.05);
             box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
         }
+
+        .auth-section {
+            margin-top: 20px;
+        }
+
+        .auth-section button {
+            padding: 10px 20px;
+            background: #f371b8;
+            color: white;
+            border: none;
+            cursor: pointer;
+            margin: 10px;
+        }
+
+        .auth-section button:hover {
+            background: #e0569d;
+        }
     </style>
 </head>
 <body>
@@ -131,42 +196,26 @@
         </nav>
     </div>
 
-    <!-- Каталог, который будет сразу открыт -->
-    <div class="catalog-container" id="catalogContainer">
+    <p id="welcomeMessage"></p>
+
+    <div id="authButtons" class="auth-section">
+        <a href="register.html"><button>Регистрация</button></a>
+        <a href="login.html"><button>Вход</button></a>
+    </div>
+
+    <div id="logoutSection" class="auth-section" style="display: none;">
+        <button onclick="logoutUser()">Выйти</button>
+        <a href="catalog.html"><button>Перейти в каталог</button></a>
+    </div>
+
+    <div class="catalog-container">
         <div class="catalog">
             <h2>Каталог</h2>
             <div class="image-container">
-                <!-- Пример изображений по парно -->
-                <a href="./main.html">
-                    <img src="./catalog/Без имени-1.png" alt="Image 1">
-                </a>
-                <a href="page1.html">
-                    <img src="./catalog/Без имени-1.png" alt="Image 2">
-                </a>
-
-                <a href="page2.html">
-                    <img src="./catalog/Без имени-1.png" alt="Image 3">
-                </a>
-                <a href="page2.html">
-                    <img src="./catalog/Без имени-1.png" alt="Image 4">
-                </a>
-
-                <a href="page3.html">
-                    <img src="./catalog/Без имени-1.png" alt="Image 5">
-                </a>
-                <a href="page3.html">
-                    <img src="./catalog/Без имени-1.png" alt="Image 6">
-                </a>
-                <a href="page3.html">
-                    <img src="./catalog/Без имени-1.png" alt="Image 6">
-                </a>
-                <a href="page3.html">
-                    <img src="./catalog/Без имени-1.png" alt="Image 6">
-                </a>
-                <a href="page3.html">
-                    <img src="./catalog/Без имени-1.png" alt="Image 6">
-                </a>
-                <!-- Добавьте больше изображений по мере необходимости -->
+                <a href="./main.html"><img src="./catalog/Без имени-1.png" alt="Image 1"></a>
+                <a href="page1.html"><img src="./catalog/Без имени-1.png" alt="Image 2"></a>
+                <a href="page2.html"><img src="./catalog/Без имени-1.png" alt="Image 3"></a>
+                <a href="page3.html"><img src="./catalog/Без имени-1.png" alt="Image 4"></a>
             </div>
         </div>
     </div>
@@ -174,6 +223,5 @@
     <div class="footer">
         <p>&copy; 2025 Hanbby Redux. Все права защищены.</p>
     </div>
-
 </body>
 </html>
