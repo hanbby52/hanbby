@@ -30,13 +30,22 @@
             const authButtons = document.getElementById('authButtons');
             const profileLink = document.getElementById('profileLink');
             const userEmail = document.getElementById('userEmail');
+            const userAvatar = document.getElementById('userAvatar');
 
             if (user) {
                 welcomeMessage.textContent = `Добро пожаловать, ${user.email}`;
                 userEmail.textContent = `Пользователь: ${user.email}`;
-                logoutSection.style.display = 'block';
+                logoutSection.style.display = 'flex';
                 authButtons.style.display = 'none';
                 profileLink.style.display = 'inline-block';  // Показываем ссылку на Личный кабинет
+
+                // Загружаем аватарку пользователя (если она есть)
+                if (user.photoURL) {
+                    userAvatar.src = user.photoURL;
+                } else {
+                    // Устанавливаем аватарку по умолчанию, если её нет
+                    userAvatar.src = 'https://via.placeholder.com/40';
+                }
             } else {
                 welcomeMessage.textContent = '';
                 logoutSection.style.display = 'none';
@@ -251,6 +260,43 @@
         .modal button:hover {
             background: #e0569d;
         }
+
+        /* Стили для кнопок и аватара */
+        .auth-section {
+            display: flex;
+            justify-content: flex-end;
+            align-items: center;
+        }
+
+        .auth-section span {
+            margin-right: 10px;
+            font-size: 18px;
+            color: white;
+        }
+
+        .auth-buttons button, .auth-section button {
+            padding: 10px 20px;
+            background: #f371b8;
+            color: white;
+            border: none;
+            cursor: pointer;
+            margin: 10px;
+            border-radius: 5px;
+            font-size: 16px;
+            transition: background 0.3s;
+        }
+
+        .auth-buttons button:hover, .auth-section button:hover {
+            background: #e0569d;
+        }
+
+        #userAvatar {
+            width: 40px;
+            height: 40px;
+            object-fit: cover;
+            border-radius: 50%;
+            margin-right: 10px;
+        }
     </style>
 </head>
 <body>
@@ -265,7 +311,11 @@
             <a href="login.html"><button>Вход</button></a>
         </div>
         <div id="logoutSection" class="auth-section" style="display: none;">
-            <span id="userEmail"></span>
+            <div style="display: flex; align-items: center;">
+                <!-- Добавим аватарку пользователя -->
+                <img id="userAvatar" src="https://via.placeholder.com/40" alt="Avatar">
+                <span id="userEmail"></span>
+            </div>
             <button onclick="logoutUser()">Выйти</button>
             <a href="profile.html"><button id="profileLink" style="display: none;">Личный кабинет</button></a>
         </div>
