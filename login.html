@@ -3,18 +3,11 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Вход</title>
+    <title>Вход в систему</title>
     <script type="module">
-        // Import the functions you need from the SDKs you need
+        import { getAuth, signInWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
-         import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
-         import { getAnalytics } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-analytics.js";
 
-        // TODO: Add SDKs for Firebase products that you want to use
-        // https://firebase.google.com/docs/web/setup#available-libraries
-
-        // Your web app's Firebase configuration
-        // For Firebase JS SDK v7.20.0 and later, measurementId is optional
         const firebaseConfig = {
             apiKey: "AIzaSyAJK1HpreoH39abRnCmjVtq3SNrUBnHMAI",
             authDomain: "hanbby-a9579.firebaseapp.com",
@@ -25,46 +18,131 @@
             measurementId: "G-60SGJ87ZNZ"
         };
 
-        // Initialize Firebase
         const app = initializeApp(firebaseConfig);
-        const analytics = getAnalytics(app);
+        const auth = getAuth(app);
 
-        // Отслеживание состояния аутентификации
-        onAuthStateChanged(auth, (user) => {
-            if (user) {
-                document.getElementById("authButtons").style.display = "none";
-                document.getElementById("logoutSection").style.display = "block";
-                document.getElementById("welcomeMessage").innerText = `Добро пожаловать, ${user.email}`;
-            } else {
-                document.getElementById("authButtons").style.display = "block";
-                document.getElementById("logoutSection").style.display = "none";
+        // Функция входа
+        function loginUser() {
+            const email = document.getElementById('email').value;
+            const password = document.getElementById('password').value;
+
+            // Проверка на пустые поля
+            if (email === '' || password === '') {
+                alert('Пожалуйста, заполните все поля.');
+                return;
             }
-        });
 
-        // Функция выхода
-        function logoutUser() {
-            signOut(auth).then(() => {
-                alert("Вы вышли!");
-                window.location.reload();
-            }).catch((error) => {
-                alert("Ошибка выхода: " + error.message);
-            });
+            // Показать индикатор загрузки
+            document.getElementById('loading').style.display = 'block';
+            document.getElementById('loginButton').disabled = true;
+
+            signInWithEmailAndPassword(auth, email, password)
+                .then((userCredential) => {
+                    // Успешный вход
+                    const user = userCredential.user;
+                    alert('Добро пожаловать, ' + user.email);
+                    window.location.href = 'index.html';  // Переход на главную страницу
+                })
+                .catch((error) => {
+                    // Обработка ошибок
+                    alert('Ошибка входа: ' + error.message);
+                    document.getElementById('loading').style.display = 'none';
+                    document.getElementById('loginButton').disabled = false;
+                });
         }
 
-        // Экспорт функции выхода для использования в HTML
-        window.logoutUser = logoutUser;
+        window.loginUser = loginUser;
     </script>
     <style>
-        body { font-family: Arial, sans-serif; text-align: center; background: #1c1c1c; color: white; margin: 50px; }
-        input, button { margin: 10px; padding: 10px; width: 200px; }
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Roboto', sans-serif;
+            background-color: #ceb4b4;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            flex-direction: column;
+            text-align: center;
+        }
+
+        h1 {
+            color: #f371b8;
+            margin-bottom: 20px;
+        }
+
+        .form-container {
+            background-color: white;
+            padding: 30px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+            border-radius: 8px;
+            width: 100%;
+            max-width: 400px;
+        }
+
+        input[type="email"], input[type="password"] {
+            width: 100%;
+            padding: 12px;
+            margin: 10px 0;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 16px;
+        }
+
+        button {
+            width: 100%;
+            padding: 12px;
+            background-color: #f371b8;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            font-size: 16px;
+            cursor: pointer;
+            transition: background 0.3s ease;
+        }
+
+        button:hover {
+            background-color: #e0569d;
+        }
+
+        .footer {
+            margin-top: 20px;
+            font-size: 14px;
+        }
+
+        .footer a {
+            color: #f371b8;
+            text-decoration: none;
+        }
+
+        .footer a:hover {
+            text-decoration: underline;
+        }
+
+        /* Индикатор загрузки */
+        #loading {
+            display: none;
+            margin-top: 10px;
+            color: #f371b8;
+        }
     </style>
 </head>
 <body>
-
     <h1>Вход</h1>
-    <input type="email" id="email" placeholder="Введите Email"><br>
-    <input type="password" id="password" placeholder="Введите пароль"><br>
-    <button onclick="loginUser()">Войти</button>
+    <div class="form-container">
+        <input type="email" id="email" placeholder="Введите email" required>
+        <input type="password" id="password" placeholder="Введите пароль" required>
+        <button id="loginButton" onclick="loginUser()">Войти</button>
+        <div id="loading">Загрузка...</div>
+    </div>
 
+    <div class="footer">
+        <p>Нет аккаунта? <a href="register.html">Зарегистрироваться</a></p>
+    </div>
 </body>
 </html>

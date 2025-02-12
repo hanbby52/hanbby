@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hanbby Redux - Регистрация / Вход</title>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap">
+    <script type="module">
+        import { getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyAJK1HpreoH39abRnCmjVtq3SNrUBnHMAI",
+            authDomain: "hanbby-a9579.firebaseapp.com",
+            projectId: "hanbby-a9579",
+            storageBucket: "hanbby-a9579.firebasestorage.app",
+            messagingSenderId: "991485754040",
+            appId: "1:991485754040:web:c1ad51c3682b68ad88d24d",
+            measurementId: "G-60SGJ87ZNZ"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+
+        // Регистрация
+        function registerUser() {
+            const email = document.getElementById('email').value;
+            const password = document.getElementById('password').value;
+
+            if (password.length < 6) {
+                alert('Пароль должен содержать минимум 6 символов.');
+                return;
+            }
+
+            createUserWithEmailAndPassword(auth, email, password)
+                .then((userCredential) => {
+                    const user = userCredential.user;
+                    alert('Регистрация успешна. Добро пожаловать, ' + user.email);
+                    window.location.href = 'login.html';
+                })
+                .catch((error) => {
+                    const errorMessage = error.message;
+                    alert('Ошибка регистрации: ' + errorMessage);
+                });
+        }
+
+        // Вход
+        function loginUser() {
+            const email = document.getElementById('email').value;
+            const password = document.getElementById('password').value;
+
+            signInWithEmailAndPassword(auth, email, password)
+                .then((userCredential) => {
+                    const user = userCredential.user;
+                    alert('Добро пожаловать, ' + user.email);
+                    window.location.href = 'index.html'; // Переход на главную страницу
+                })
+                .catch((error) => {
+                    const errorMessage = error.message;
+                    alert('Ошибка входа: ' + errorMessage);
+                });
+        }
+
+        window.registerUser = registerUser;
+        window.loginUser = loginUser;
+    </script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Roboto', sans-serif;
+            background: #f0f0f0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            flex-direction: column;
+        }
+
+        .form-container {
+            background: #fff;
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+            width: 100%;
+            max-width: 400px;
+            text-align: center;
+        }
+
+        h1 {
+            color: #f371b8;
+            margin-bottom: 20px;
+        }
+
+        input[type="email"], input[type="password"] {
+            width: 100%;
+            padding: 12px;
+            margin: 10px 0;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 16px;
+        }
+
+        button {
+            width: 100%;
+            padding: 12px;
+            background: #f371b8;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            font-size: 16px;
+            cursor: pointer;
+            transition: background 0.3s ease;
+        }
+
+        button:hover {
+            background: #e0569d;
+        }
+
+        .form-footer {
+            margin-top: 20px;
+        }
+
+        .form-footer a {
+            color: #f371b8;
+            text-decoration: none;
+        }
+
+        .form-footer a:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+    <div class="form-container">
+        <h1>Hanbby Redux</h1>
+
+        <form id="authForm">
+            <input type="email" id="email" placeholder="Введите email" required>
+            <input type="password" id="password" placeholder="Введите пароль" required>
+            
+            <button type="button" onclick="window.location.href === 'register.html' ? registerUser() : loginUser()">
+                {{ pageTitle === 'Регистрация' ? 'Зарегистрироваться' : 'Войти'}}
+            </button>
+        </form>
+
+        <div class="form-footer">
+            <p>{{ pageTitle === 'Регистрация' ? 'Есть аккаунт?' : 'Нет аккаунта?'}}
+                <a href="{{ pageTitle === 'Регистрация' ? 'login.html' : 'register.html'}}">
+                    {{ pageTitle === 'Регистрация' ? 'Войти' : 'Зарегистрироваться'}}
+                </a>
+            </p>
+        </div>
+    </div>
+</body>
+</html>
