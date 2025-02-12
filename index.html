@@ -334,6 +334,56 @@
             margin-right: 10px;
         }
     </style>
+    <style>
+        .navbar {
+            display: flex;
+            justify-content: flex-start;
+            align-items: center;
+            background-color: #1c1c1c;
+            padding: 15px 20px;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            z-index: 1000;
+        }
+        .auth-section {
+            display: flex;
+            align-items: center;
+            margin-left: auto;
+            position: relative;
+        }
+        #userAvatar {
+            width: 40px;
+            height: 40px;
+            object-fit: cover;
+            border-radius: 50%;
+            margin-right: 10px;
+        }
+        .user-menu {
+            position: absolute;
+            top: 50px;
+            right: 0;
+            background: #1c1c1c;
+            border-radius: 5px;
+            padding: 10px;
+            display: none;
+            flex-direction: column;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+        }
+        .user-menu a, .user-menu button {
+            color: #f371b8;
+            background: none;
+            border: none;
+            padding: 10px;
+            text-align: left;
+            cursor: pointer;
+            display: block;
+        }
+        .user-menu button:hover, .user-menu a:hover {
+            background: #333;
+        }
+    </style>
 </head>
 <body>
     <div class="navbar">
@@ -347,13 +397,12 @@
             <a href="login.html"><button>Вход</button></a>
         </div>
         <div id="logoutSection" class="auth-section" style="display: none;">
-            <div style="display: flex; align-items: center;">
-                <!-- Добавим аватарку пользователя -->
-                <img id="userAvatar" src="https://via.placeholder.com/40" alt="Avatar">
-                <span id="userEmail"></span>
+            <img id="userAvatar" src="https://via.placeholder.com/40" alt="Avatar">
+            <span id="userEmail" onclick="toggleMenu()" style="cursor: pointer;">Пользователь</span>
+            <div id="userMenu" class="user-menu">
+                <a href="profile.html">Личный кабинет</a>
+                <button onclick="logoutUser()">Выйти</button>
             </div>
-            <button onclick="logoutUser()">Выйти</button>
-            <a href="profile.html"><button id="profileLink" style="display: none;">Личный кабинет</button></a>
         </div>
     </div>
 
@@ -387,5 +436,15 @@
     <div class="footer">
         <p>&copy; 2025 Hanbby. Все права защищены.</p>
     </div>
+    <script>
+        function toggleMenu() {
+            const menu = document.getElementById('userMenu');
+            menu.style.display = menu.style.display === 'block' ? 'none' : 'block';
+        }
+        function logoutUser() {
+            alert('Вы успешно вышли из системы');
+            window.location.href = 'index.html';
+        }
+    </script>
 </body>
 </html>
