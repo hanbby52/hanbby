@@ -213,6 +213,35 @@
             z-index: 999;
         }
 
+        #userEmail {
+            cursor: pointer;
+            font-size: 18px;
+            color: #f371b8;
+            transition: color 0.3s ease, transform 0.2s ease;
+        }
+
+        #userEmail:hover {
+            color: #ffffff;
+            transform: scale(1.05);
+            text-decoration: underline;
+        }
+
+        #userAvatar {
+            width: 40px;
+            height: 40px;
+            object-fit: cover;
+            border-radius: 50%;
+            margin-right: 10px;
+            cursor: pointer;
+            transition: transform 0.2s ease, box-shadow 0.3s ease;
+        }
+
+        #userAvatar:hover {
+            transform: scale(1.1);
+            box-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
+        }
+
+
         .catalog {
             width: 90%;
             max-width: 1200px;
@@ -397,8 +426,8 @@
             <a href="login.html"><button>Вход</button></a>
         </div>
         <div id="logoutSection" class="auth-section" style="display: none;">
-            <img id="userAvatar" src="./catalog/avatar.png" alt="Avatar">
-            <span id="userEmail" onclick="toggleMenu()" style="cursor: pointer;">Пользователь</span>
+            <img id="userAvatar" src="./catalog/avatar.png" alt="Avatar" onclick="toggleMenu()">
+            <span id="userEmail" onclick="toggleMenu()">Пользователь</span>
             <div id="userMenu" class="user-menu">
                 <a href="profile.html">Личный кабинет</a>
                 <button onclick="logoutUser()">Выйти</button>
